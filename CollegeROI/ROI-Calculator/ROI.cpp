@@ -42,7 +42,7 @@ void ROI::AddCollege(const std::string& CollegeName, unsigned int cost, unsigned
     }
 }
 
-College* ROI::LoadCollege(std::string) const {
+College * ROI::LoadCollege(std::string CollegeName) const {
 
 }
 

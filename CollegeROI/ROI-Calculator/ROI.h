@@ -23,7 +23,7 @@ class ROI {
         static ROI *GetInstance();
         void AddCollege(const std::string&, College*);
         void AddCollege(const std::string&, unsigned int, unsigned  int);
-        void LoadCollege(std::string) const;
+        College * LoadCollege(std::string) const;
 };
 
 

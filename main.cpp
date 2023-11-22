@@ -1,6 +1,12 @@
 #include <iostream>
-
+#include "ROI-Calculator/ROI.h"
 int main() {
+
+    ROI* roiInstance = ROI::GetInstance();
+
+    roiInstance->AddCollege("Berkley", 15000, 15000);
+    roiInstance->AddCollege("Berkley", 15000, 15000);
+
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }

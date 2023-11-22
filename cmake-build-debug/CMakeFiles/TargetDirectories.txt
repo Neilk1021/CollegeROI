@@ -1,0 +1,3 @@
+C:/Users/Neilf/CLionProjects/CollegeROI/cmake-build-debug/CMakeFiles/CollegeROI_.dir
+C:/Users/Neilf/CLionProjects/CollegeROI/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Neilf/CLionProjects/CollegeROI/cmake-build-debug/CMakeFiles/rebuild_cache.dir

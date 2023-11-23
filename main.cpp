@@ -5,8 +5,8 @@ int main() {
     ROI* roiInstance = ROI::GetInstance();
 
     roiInstance->AddCollege("Berkley", 15000, 15000);
-    roiInstance->AddCollege("Berkley", 15000, 15000);
 
-    std::cout << "Hello, World!" << std::endl;
+    std::cout<< roiInstance->LoadCollege("Berkley")->GetCost() << std::endl;
+
     return 0;
 }

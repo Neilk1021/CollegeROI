@@ -18,12 +18,12 @@ class ROI {
         static ROI* instance;
         ROI() {};
     public:
-        ROI(ROI &other) = delete;
-        void operator=(const ROI &) = delete;
+        //ROI(ROI &other) = delete;
+        //void operator=(const ROI &) ;
         static ROI *GetInstance();
         void AddCollege(const std::string&, College*);
         void AddCollege(const std::string&, unsigned int, unsigned  int);
-        College * LoadCollege(std::string) const;
+        [[nodiscard]] College * LoadCollege(const std::string&) const;
 };
 
 

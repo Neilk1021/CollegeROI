@@ -42,7 +42,17 @@ void ROI::AddCollege(const std::string& CollegeName, unsigned int cost, unsigned
     }
 }
 
-College * ROI::LoadCollege(std::string CollegeName) const {
-
+College * ROI::LoadCollege(const std::string& CollegeName) const {
+    try{
+        size_t hashVal = hashAlg(CollegeName);
+        if (hash.find(hashVal) == hash.end()){
+            throw std::invalid_argument("College doesn't exist.");
+        }
+        return hash.at(hashVal);
+    }
+    catch (std::invalid_argument &e) {
+        std::cout << e.what() << std::endl;
+        return nullptr;
+    }
 }
 

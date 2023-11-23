@@ -11,3 +11,12 @@ TEST(CollegeCheckSuit, ExampleCollege){
 
     EXPECT_EQ(roiInstance->LoadCollege("Berkley")->GetCost(), 15000);
 }
+
+TEST(CollegeCheckSuit, CollegeDuplicate){
+    ROI* roiInstance = ROI::GetInstance();
+
+    roiInstance->AddCollege("Harvard", 15000, 15000);
+    roiInstance->AddCollege("Harvard", 65, 65);
+
+    EXPECT_EQ(roiInstance->LoadCollege("Berkley")->GetCost(), 15000);
+}

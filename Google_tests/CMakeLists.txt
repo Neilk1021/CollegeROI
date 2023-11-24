@@ -12,7 +12,12 @@ add_executable(Google_Tests_run test1.cpp
         ../CollegeROI/ROI-Calculator/ROI.cpp
         ../CollegeROI/ROI-Calculator/ROI.h
         ../CollegeROI/Application/Application.cpp
-        ../CollegeROI/Application/Application.h)
+        ../CollegeROI/Application/Application.h
+        ../CollegeROI/Application/Window/Window.cpp
+        ../CollegeROI/Application/Window/Window.h
+        ../CollegeROI/Application/Button/Button.cpp
+        ../CollegeROI/Application/Button/Button.h
+)
 
 
 target_link_libraries(Google_Tests_run gtest gtest_main)

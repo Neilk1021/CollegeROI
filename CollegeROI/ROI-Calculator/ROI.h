@@ -18,11 +18,14 @@ class ROI {
         static ROI* instance;
         ROI() {};
     public:
-        //ROI(ROI &other) = delete;
-        //void operator=(const ROI &) ;
+        ROI(ROI &other) = delete;
+        void operator=(const ROI&) = delete;
         static ROI *GetInstance();
+        //Adds college to hash via pointer
         void AddCollege(const std::string&, College*);
+        //Adds college to hash via cost and ROI
         void AddCollege(const std::string&, unsigned int, unsigned  int);
+        //Loads college from the hash if one exists.
         [[nodiscard]] College * LoadCollege(const std::string&) const;
 };
 

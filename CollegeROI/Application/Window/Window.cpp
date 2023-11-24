@@ -35,7 +35,6 @@ void Window::LoadWindow(const std::shared_ptr<Window>& window) {
     }
 
     Print(window->information, 15);
-    std::cout << std::endl;
 
     std::list<Button>::iterator it;
     window->buttonVal = 1;

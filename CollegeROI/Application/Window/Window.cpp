@@ -11,7 +11,6 @@ HANDLE Window::hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 void Window::Print(const std::string &str, int Color) {
     SetConsoleTextAttribute(hConsole, Color);
     std::cout << str << std::endl;
-    SetConsoleTextAttribute(hConsole, 15);
 }
 
 void Window::Clear_screen(char fill) {
@@ -29,22 +28,25 @@ void Window::LoadWindow(const std::shared_ptr<Window>& window) {
     if(window == nullptr){
         throw std::invalid_argument("Trying to load nonexistent window");
     }
-
     if(window->isLoaded){
         throw std::invalid_argument("Window is already loaded.");
     }
 
-    Print(window->information, 15);
-
-    std::list<Button>::iterator it;
     window->buttonVal = 1;
-
-    for (it = window->buttons.begin(); it != window->buttons.end(); ++it){
-        it->refresh(window->buttonVal, Window::hConsole);
-    }
-
     window->isLoaded = true;
 
+    generateWindow(window);
+    InputTypes::Type _type;
+
+    do{
+        _type = handleWindowInput(window);
+        if(_type != InputTypes::Type::WindowLoader){ Window::ClickWindow(window, window->buttonVal); }
+    }while (_type != InputTypes::Type::WindowLoader);
+
+    LoadWindow(Window::ClickWindow(window, window->buttonVal));
+}
+
+InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
     int c = 0;
     bool clicked = false;
 
@@ -58,37 +60,102 @@ void Window::LoadWindow(const std::shared_ptr<Window>& window) {
                 RefreshWindow(window);
                 break;
             case KEY_DOWN:
-                if(window->buttonVal < window->buttons.size()) {window->buttonVal++;}
+                if(window->buttonVal < window->inputs.size()) {window->buttonVal++;}
                 RefreshWindow(window);
                 break;
             case ENTER:
                 clicked = true;
                 break;
+            case BACKSPACE:
+                if(window->inputs[window->buttonVal - 1]->getType() == InputTypes::Type::Keyboard){
+                    InputField * convert = window->inputs[window->buttonVal - 1];
+                    auto text = dynamic_cast<TextInput*>(convert);
+                    text->deleteChar();
+                }
+                RefreshWindow(window);
+                break;
             default:
+
+                if(!std::isalnum(c)){break;}
+
+                if(window->inputs[window->buttonVal - 1]->getType() == InputTypes::Type::Keyboard){
+                    InputField * convert = window->inputs[window->buttonVal - 1];
+                    auto text = dynamic_cast<TextInput*>(convert);
+
+                    if(text->isNumOnly() && !std::isdigit(c) || !text->isNumOnly() && !std::isalpha(c)){
+                        break;
+                    }
+
+                    text->addChar((char)c);
+                }
+                RefreshWindow(window);
                 break;
         }
     }
 
-    LoadWindow(Window::ClickWindow(window, window->buttonVal));
+    return window->inputs[window->buttonVal - 1]->getType();
+
 }
 
 void Window::RefreshWindow(const std::shared_ptr<Window>& window) {
     if(window == nullptr){
-        throw std::invalid_argument("Trying to load nonexistent window");
+        throw std::invalid_argument("Attempted to refresh Window. Trying to load nonexistent window");
     }
-
     if(!window->isLoaded){
-        throw std::invalid_argument("Window is not loaded");
+        throw std::invalid_argument("Attempted to refresh Window. Window is not loaded");
     }
 
     Clear_screen();
+    generateWindow(window);
 
+}
+
+void Window::generateWindow(const std::shared_ptr<Window> &window) {
     Print(window->information, 15);
 
-    std::list<Button>::iterator it;
-    for (it = window->buttons.begin(); it != window->buttons.end(); ++it){
-        it->refresh(window->buttonVal, Window::hConsole);
+    for (int i = 0; i < window->additionalInfo.size(); i++) {
+        Print(window->additionalInfo[i].Info, window->additionalInfo[i].Color);
     }
+
+    std::cout << std::endl;
+
+    for (int i = 0; i < window->inputs.size(); ++i) {
+        InputField * convert = window->inputs[i];
+
+        TextInput * textI;
+        Button * button;
+
+        InputTypes::Type type = convert->getType();
+        switch (type) {
+            case InputTypes::Keyboard:
+                textI = dynamic_cast<TextInput*>(convert);
+                textI->refresh(window->buttonVal, hConsole);
+                break;
+            default:
+                button = dynamic_cast<Button*>(convert);
+                button->refresh(window->buttonVal, hConsole);
+                break;
+        }
+    }
+}
+
+std::shared_ptr<Window> Window::ClickWindow(const std::shared_ptr<Window> &window, unsigned int pos) {
+
+    switch ( window->inputs[pos - 1]->getType()) {
+        case InputTypes::WindowLoader:
+            Window::UnloadWindow(window);
+            if(window->windowPtr[pos-1] == nullptr){
+                throw std::invalid_argument("Tried to load non-window");
+            }
+            return window->windowPtr[pos-1];
+        case InputTypes::Action:
+            window->runFunction(pos);
+            return nullptr;
+        case InputTypes::Keyboard:
+            break;
+    }
+
+    return nullptr;
 }
 
 void Window::UnloadWindow(const std::shared_ptr<Window>& window) {
@@ -97,13 +164,9 @@ void Window::UnloadWindow(const std::shared_ptr<Window>& window) {
     }
 
     if(!window->isLoaded){
-        throw std::invalid_argument("Window is not loaded");
+        throw std::invalid_argument("Tried to unload unloaded window.");
     }
 
-    /*unsigned int length =window->buttons.size();
-    for (int i = 0; i < length; ++i) {
-        window->buttons.pop_front();
-    }*/
     window->isLoaded = false;
     Window::Clear_screen();
 }
@@ -122,16 +185,10 @@ Window::Window
     this->intakeInfo = intake;
 
     for (int i = 0; i < windowPtr.size(); ++i) {
-        auto tempButton = new Button(i, labels.back());
+        auto tempButton = new Button(InputTypes::Action, i, labels.back());
         labels.pop_back();
-        buttons.push_back(*tempButton);
+        inputs.push_back(tempButton);
     }
-}
-
-void Window::addPtr(const std::shared_ptr<Window>& window, const std::string& label) {
-    windowPtr.push_back(window);
-    auto tempButton = new Button(windowPtr.size(), label);
-    buttons.push_back(*tempButton);
 }
 
 Window::Window(const std::string& info, bool intake) {
@@ -139,8 +196,44 @@ Window::Window(const std::string& info, bool intake) {
     information = info;
 }
 
-std::shared_ptr<Window> Window::ClickWindow(const std::shared_ptr<Window> &window, unsigned int pos) {
-    Window::UnloadWindow(window);
-    return window->windowPtr[pos-1];
+void Window::addPtr(const std::shared_ptr<Window>& window, const std::string& label) {
+    windowPtr.push_back(window);
+    auto tempButton = new Button(InputTypes::WindowLoader, windowPtr.size(), label);
+    inputs.push_back(tempButton);
 }
+
+void Window::addFunc(void (*fPtr)(const std::string &, unsigned int, unsigned int)) {
+    windowPtr.push_back(nullptr);
+    auto tempButton = new Button(InputTypes::Action, windowPtr.size(), "Submit");
+    tempButton->addFunction(fPtr);
+    inputs.push_back(tempButton);
+}
+
+void Window::addInfo(const std::string &info, int color) {
+    additionalInfo.push_back({color, info});
+}
+
+void Window::addInput(const std::string &labelVal, bool numOnly) {
+    windowPtr.push_back(nullptr);
+    auto tempInput = new TextInput(InputTypes::Keyboard, windowPtr.size(), labelVal, numOnly);
+    inputs.push_back(tempInput);
+}
+
+//Need to add variable params
+void Window::runFunction(unsigned int pos) const {
+    InputField * convert = inputs[pos - 1];
+    auto button = dynamic_cast<Button*>(convert);
+
+    std::vector<std::string> data;
+
+
+    for (auto input : inputs) {
+        if(input->getType() == InputTypes::Type::Keyboard){
+            auto text = dynamic_cast<TextInput*>(input);
+            data.push_back(text->getInfo());
+        }
+    }
+    button->runFunction(data);
+}
+
 

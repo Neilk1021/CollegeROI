@@ -17,11 +17,20 @@ Application::Application() {
     std::shared_ptr<Window> LoadColleges =  std::make_shared<Window>(Window("Load Colleges", true));
     std::shared_ptr<Window> AddColleges =  std::make_shared<Window>(Window("Add Colleges", true));
 
+    mainMenu->addInfo("-Neil Ketteringham CC-2023", 1);
+
     mainMenu->addPtr(LoadColleges, "Load Colleges");
     mainMenu->addPtr(AddColleges, "Add Colleges");
 
+    AddColleges->addInput("Name:", false);
+    AddColleges->addInput("Price:", true);
+    AddColleges->addInput("Average Salary:", true);
+
+    AddColleges->addFunc(ROI::AddCollege);
+
     LoadColleges->addPtr(mainMenu, "Back");
     AddColleges->addPtr(mainMenu, "Back");
+
     Window::LoadWindow(mainMenu);
 
 

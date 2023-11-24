@@ -16,4 +16,8 @@ add_executable(CollegeROI_ main.cpp
         CollegeROI/Application/Window/Window.h
         CollegeROI/Application/Button/Button.cpp
         CollegeROI/Application/Button/Button.h
+        CollegeROI/Application/InputField/InputField.cpp
+        CollegeROI/Application/InputField/InputField.h
+        CollegeROI/Application/TextInput/TextInput.cpp
+        CollegeROI/Application/TextInput/TextInput.h
 )

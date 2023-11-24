@@ -14,9 +14,9 @@ ROI *ROI::GetInstance() {
 
 void ROI::AddCollege(const std::string& CollegeName, College* college) {
     try{
-        size_t hashVal = hashAlg(CollegeName);
-        if (hash.find(hashVal) == hash.end()){
-            hash[hashVal] = college;
+        size_t hashVal = instance->hashAlg(CollegeName);
+        if (instance->hash.find(hashVal) == instance->hash.end()){
+            instance->hash[hashVal] = college;
             return;
         }
 
@@ -29,9 +29,9 @@ void ROI::AddCollege(const std::string& CollegeName, College* college) {
 
 void ROI::AddCollege(const std::string& CollegeName, unsigned int cost, unsigned int ROI) {
     try{
-        size_t hashVal = hashAlg(CollegeName);
-        if (hash.find(hashVal) == hash.end()){
-            hash[hashVal] = new College(cost, ROI);
+        size_t hashVal = instance->hashAlg(CollegeName);
+        if (instance->hash.find(hashVal) == instance->hash.end()){
+            instance->hash[hashVal] = new College(cost, ROI);
             return;
         }
 
@@ -42,13 +42,13 @@ void ROI::AddCollege(const std::string& CollegeName, unsigned int cost, unsigned
     }
 }
 
-College * ROI::LoadCollege(const std::string& CollegeName) const {
+College * ROI::LoadCollege(const std::string& CollegeName) {
     try{
-        size_t hashVal = hashAlg(CollegeName);
-        if (hash.find(hashVal) == hash.end()){
+        size_t hashVal = instance->hashAlg(CollegeName);
+        if (instance->hash.find(hashVal) == instance->hash.end()){
             throw std::invalid_argument("College doesn't exist.");
         }
-        return hash.at(hashVal);
+        return instance->hash.at(hashVal);
     }
     catch (std::invalid_argument &e) {
         std::cout << e.what() << std::endl;

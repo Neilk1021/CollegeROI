@@ -7,16 +7,20 @@
 #include <string>
 #include <windows.h>
 #include <iostream>
+#include <vector>
+#include "../InputField/InputField.h"
 
-class Button {
+
+class Button : public InputField {
 private:
-    int val;
-    std::string label;
-    const int Color = 15;
-    const int ColorHighlight = 67;
+    void (*funcPtr)(const std::string&, unsigned int, unsigned int){};
+    std::vector<std::string> data;
 public:
-    void refresh(unsigned int checkVal, HANDLE hConsole);
-    Button(int pos, const std::string &labelVal);
+    void refresh(unsigned int checkVal, HANDLE hConsole) override;
+    Button(InputTypes::Type type, int pos, const std::string &labelVal);
+
+    void addFunction(void (*fPtr)(const std::string &, unsigned int, unsigned int));
+    void runFunction(const std::vector<std::string>& data_) const;
 };
 
 

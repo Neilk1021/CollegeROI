@@ -33,9 +33,12 @@ void Button::runFunction(const std::vector<std::string>& data_) const {
 
         NumInfo.push_back(std::stoi(i));
     }
-    
-    funcPtr(TextInfo[0], NumInfo[0], NumInfo[1]);
-    std::cout << "Added " << TextInfo[0] << ": Cost - " << NumInfo[0] << " Price - " << NumInfo[1] << std::endl;
+
+    try{
+        funcPtr(TextInfo[0], NumInfo[0], NumInfo[1]);
+    }catch(std::invalid_argument &e){
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void Button::addFunction(void (*fPtr)(const std::string &, unsigned int, unsigned int)) {

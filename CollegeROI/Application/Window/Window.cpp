@@ -74,15 +74,19 @@ InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window
                 }
                 RefreshWindow(window);
                 break;
+            case KEY_LEFT:
+                break;
+            case KEY_RIGHT:
+                break;
             default:
 
-                if(!std::isalnum(c)){break;}
+                if(!std::isalnum(c) && c != 32){break;}
 
                 if(window->inputs[window->buttonVal - 1]->getType() == InputTypes::Type::Keyboard){
                     InputField * convert = window->inputs[window->buttonVal - 1];
                     auto text = dynamic_cast<TextInput*>(convert);
 
-                    if(text->isNumOnly() && !std::isdigit(c) || !text->isNumOnly() && !std::isalpha(c)){
+                    if(text->isNumOnly() && !std::isdigit(c) || !text->isNumOnly() && (!std::isalpha(c) && c != 32)){
                         break;
                     }
 
@@ -224,14 +228,21 @@ void Window::runFunction(unsigned int pos) const {
     InputField * convert = inputs[pos - 1];
     auto button = dynamic_cast<Button*>(convert);
 
-    std::vector<std::string> data;
+    std::vector<std::string> data(3);
 
-
+    int i = 0;
     for (auto input : inputs) {
         if(input->getType() == InputTypes::Type::Keyboard){
             auto text = dynamic_cast<TextInput*>(input);
-            data.push_back(text->getInfo());
+            data[i] = (text->getInfo());
+            i++;
         }
+    }
+    if(data[1].empty()){
+        data[1] = "0";
+        data[2] = "0";
+    }else if(data[2].empty()){
+        data[2] = "0";
     }
     button->runFunction(data);
 }

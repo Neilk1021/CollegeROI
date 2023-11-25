@@ -21,6 +21,8 @@ add_executable(Google_Tests_run test1.cpp
         ../CollegeROI/Application/InputField/InputField.h
         ../CollegeROI/Application/TextInput/TextInput.cpp
         ../CollegeROI/Application/TextInput/TextInput.h
+        ../CollegeROI/CSV-Compiler/CSVCompiler.cpp
+        ../CollegeROI/CSV-Compiler/CSVCompiler.h
 )
 
 

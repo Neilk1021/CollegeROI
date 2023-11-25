@@ -15,7 +15,7 @@ class InputField {
         int val{};
         std::string label;
         const int Color = 15;
-        const int ColorHighlight = 67;
+        const int ColorHighlight = 79;
         InputTypes::Type type;
     public:
         explicit InputField(InputTypes::Type type_);

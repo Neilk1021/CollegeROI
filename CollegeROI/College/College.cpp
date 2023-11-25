@@ -4,9 +4,10 @@
 
 #include "College.h"
 
-College::College(unsigned int Cost, unsigned int Return)  {
+College::College(unsigned int Cost, unsigned int Return, std::string Name)  {
     this->cost = Cost;
     this->expectedReturn = Return;
+    this->Name = Name;
 }
 
 int College::GetCost() const {
@@ -15,5 +16,9 @@ int College::GetCost() const {
 
 int College::GetReturn() const {
     return expectedReturn;
+}
+
+const std::string &College::GetName() const {
+    return Name;
 }
 

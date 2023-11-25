@@ -4,14 +4,16 @@
 
 #ifndef COLLEGEROI__COLLEGE_H
 #define COLLEGEROI__COLLEGE_H
-
+#include <string>
 
 class College {
     private:
+        std::string Name;
         unsigned int cost;
         unsigned int expectedReturn;
     public:
-        College(unsigned int, unsigned int);
+        College(unsigned int, unsigned int, std::string);
+        const std::string &GetName() const;
         [[nodiscard]] int GetCost() const;
         [[nodiscard]] int GetReturn() const;
 };

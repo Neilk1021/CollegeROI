@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(Google_tests)
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+
 add_executable(CollegeROI_ main.cpp
         CollegeROI/College/College.cpp
         CollegeROI/College/College.h
@@ -20,4 +23,6 @@ add_executable(CollegeROI_ main.cpp
         CollegeROI/Application/InputField/InputField.h
         CollegeROI/Application/TextInput/TextInput.cpp
         CollegeROI/Application/TextInput/TextInput.h
+        CollegeROI/CSV-Compiler/CSVCompiler.cpp
+        CollegeROI/CSV-Compiler/CSVCompiler.h
 )

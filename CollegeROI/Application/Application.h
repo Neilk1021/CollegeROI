@@ -10,8 +10,14 @@
 class Application {
     private:
         ROI* roiInstance;
+        std::vector<std::shared_ptr<Window>> windows;
+        Application() {};
+    protected:
+        static Application* instance;
     public:
-        Application();
+        Application(Application &other) = delete;
+        static Application *GetInstance();
+        static void GenerateCollegeWindow(const std::string&, unsigned int, unsigned  int);
 };
 
 #endif //COLLEGEROI__APPLICATION_H

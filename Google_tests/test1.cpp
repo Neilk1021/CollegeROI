@@ -18,5 +18,35 @@ TEST(CollegeCheckSuit, CollegeDuplicate){
     ROI::AddCollege("Harvard", 15000, 15000);
     ROI::AddCollege("Harvard", 65, 65);
 
-    EXPECT_EQ(roiInstance->LoadCollege("Berkley")->GetCost(), 15000);
+    EXPECT_EQ(roiInstance->LoadCollege("Harvard")->GetCost(), 15000);
+}
+
+TEST(CSVCheckSuit, DuplicateCollege){
+    ROI* roiInstance = ROI::GetInstance();
+
+    ROI::AddCollege("Harvard", 15000, 15000);
+    ROI::AddCollege("Harvard", 65, 65);
+
+    std::unique_ptr<std::unordered_map<size_t , std::shared_ptr<College>>> hash;
+    if(CSVCompiler::LoadFromCSV() != nullptr){
+        hash = std::move(CSVCompiler::LoadFromCSV());
+    }else{
+        hash = std::make_unique<std::unordered_map<size_t , std::shared_ptr<College>>>();
+    }
+
+    EXPECT_EQ(hash->at(17281574884099900986)->GetCost(), 15000);
+}
+
+TEST(CSVCheckSuit, CollegeWithSpaces){
+    ROI* roiInstance = ROI::GetInstance();
+
+    ROI::AddCollege("University of Utah", 15000, 15000);
+    std::unique_ptr<std::unordered_map<size_t , std::shared_ptr<College>>> hash;
+    if(CSVCompiler::LoadFromCSV() != nullptr){
+        hash = std::move(CSVCompiler::LoadFromCSV());
+    }else{
+        hash = std::make_unique<std::unordered_map<size_t , std::shared_ptr<College>>>();
+    }
+
+    EXPECT_EQ(hash->at(10145603584388529810)->GetCost(), 15000);
 }

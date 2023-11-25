@@ -2,7 +2,7 @@
 #include "CollegeROI/Application/Application.h"
 int main() {
 
-    Application app = Application();
+    Application * app = Application::GetInstance();
 
     while(1){};
 

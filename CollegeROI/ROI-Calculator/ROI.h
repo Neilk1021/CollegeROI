@@ -29,6 +29,8 @@ class ROI {
         //Loads college from the hash if one exists.
         [[nodiscard]] static std::shared_ptr<College> LoadCollege(const std::string&) ;
 
+        [[nodiscard]] static std::vector<std::shared_ptr<College>> LoadAllColleges();
+
 };
 
 

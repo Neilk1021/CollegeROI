@@ -15,6 +15,7 @@
 #include <vector>
 #include "../InputField/InputField.h"
 #include "../TextInput/TextInput.h"
+#include <algorithm>
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -42,6 +43,7 @@ class Window {
         bool intakeInfo;
 
     public:
+        std::shared_ptr<Window> nextWin = nullptr;
         Window(std::vector<std::shared_ptr<Window>> window,
                std::list<std::string> labels,
                std::string info,
@@ -54,11 +56,12 @@ class Window {
         void addInfo(const std::string& info, int color);
         void addInput(const std::string &labelVal, bool numOnly = false);
         void runFunction(unsigned int Pos) const;
+        void updatePtr(const std::shared_ptr<Window>& window, unsigned int Pos);
 
         static std::shared_ptr<Window> ClickWindow(const std::shared_ptr<Window>& window, unsigned int pos);
         static void RefreshWindow(const std::shared_ptr<Window>& window);
-        static void LoadWindow(const std::shared_ptr<Window>& window);
-        static void UnloadWindow(const std::shared_ptr<Window>& window);
+        static std::shared_ptr<Window> LoadWindow(const std::shared_ptr<Window>& window);
+        static void UnloadWindow(const std::shared_ptr<Window>& window, const std::shared_ptr<Window>& newWindow = nullptr);
         static void Print(const std::string& str, int Color);
         static void Clear_screen(char fill = ' ');
         static InputTypes::Type handleWindowInput(const std::shared_ptr<Window> &window);

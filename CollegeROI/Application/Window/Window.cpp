@@ -24,7 +24,7 @@ void Window::Clear_screen(char fill) {
     SetConsoleCursorPosition(console, tl);
 }
 
-void Window::LoadWindow(const std::shared_ptr<Window>& window) {
+std::shared_ptr<Window> Window::LoadWindow(const std::shared_ptr<Window>& window) {
     if(window == nullptr){
         throw std::invalid_argument("Trying to load nonexistent window");
     }
@@ -41,9 +41,15 @@ void Window::LoadWindow(const std::shared_ptr<Window>& window) {
     do{
         _type = handleWindowInput(window);
         if(_type != InputTypes::Type::WindowLoader){ Window::ClickWindow(window, window->buttonVal); }
-    }while (_type != InputTypes::Type::WindowLoader);
+    }while (window->isLoaded && _type != InputTypes::Type::WindowLoader);
 
-    LoadWindow(Window::ClickWindow(window, window->buttonVal));
+    if(!window->isLoaded){
+        return window->nextWin;
+    }
+
+    return Window::ClickWindow(window, window->buttonVal);
+
+    //LoadWindow(Window::ClickWindow(window, window->buttonVal));
 }
 
 InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
@@ -162,7 +168,7 @@ std::shared_ptr<Window> Window::ClickWindow(const std::shared_ptr<Window> &windo
     return nullptr;
 }
 
-void Window::UnloadWindow(const std::shared_ptr<Window>& window) {
+void Window::UnloadWindow(const std::shared_ptr<Window>& window, const std::shared_ptr<Window>& newWindow) {
     if(window == nullptr){
         throw std::invalid_argument("Trying to unload nonexistent window");
     }
@@ -171,6 +177,7 @@ void Window::UnloadWindow(const std::shared_ptr<Window>& window) {
         throw std::invalid_argument("Tried to unload unloaded window.");
     }
 
+    window->nextWin = newWindow;
     window->isLoaded = false;
     Window::Clear_screen();
 }
@@ -245,6 +252,10 @@ void Window::runFunction(unsigned int pos) const {
         data[2] = "0";
     }
     button->runFunction(data);
+}
+
+void Window::updatePtr(const std::shared_ptr<Window> &window, unsigned int Pos) {
+    windowPtr[Pos] = window;
 }
 
 

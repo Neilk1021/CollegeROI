@@ -66,3 +66,15 @@ std::shared_ptr<College> ROI::LoadCollege(const std::string& CollegeName) {
     }
 }
 
+std::vector<std::shared_ptr<College>> ROI::LoadAllColleges() {
+
+    std::vector<std::shared_ptr<College>> vals;
+    vals.reserve(ROI::instance->hash->size());
+
+    for(auto kv : *ROI::instance->hash) {
+        vals.push_back(kv.second);
+    }
+
+   return  vals;
+}
+

@@ -67,10 +67,28 @@ void Application::LoadCollegeWindow(const std::string & collegeName, unsigned in
     if(col == nullptr){
         return;
     }
+    std::array<unsigned int, 9> projections = ROI::GetInstance()->CalculateROIs(col);
 
     std::shared_ptr<Window> CollegeWindow =  std::make_shared<Window>(Window(col->GetName(), false));
+
+
     CollegeWindow->addInfo("Cost: " + std::to_string(col->GetCost()), 1);
     CollegeWindow->addInfo("Return: " + std::to_string(col->GetReturn()), 1);
+
+    CollegeWindow->addInfo("", 15);
+
+    CollegeWindow->addInfo("Projections:", 15);
+    CollegeWindow->addInfo("Low interest rate and Low pay: " + std::to_string(projections[0]), 10);
+    CollegeWindow->addInfo("Low interest rate and Medium pay: " + std::to_string(projections[1]), 14);
+    CollegeWindow->addInfo("Low interest rate and High pay: " + std::to_string(projections[2]), 4);
+    CollegeWindow->addInfo("Medium interest rate and Low pay: " + std::to_string(projections[3]), 10);
+    CollegeWindow->addInfo("Medium interest rate and Medium pay: " + std::to_string(projections[4]), 14);
+    CollegeWindow->addInfo("Medium interest rate and High pay: " + std::to_string(projections[5]), 4);
+    CollegeWindow->addInfo("High interest rate and Low pay: " + std::to_string(projections[6]), 10);
+    CollegeWindow->addInfo("High interest rate and Medium pay: " + std::to_string(projections[7]), 14);
+    CollegeWindow->addInfo("High interest rate and High pay: " + std::to_string(projections[8]), 4);
+
+
     CollegeWindow->addPtr( instance->windows[2], "Back");
 
     Window::UnloadWindow(instance->windows[2], CollegeWindow);
@@ -84,9 +102,35 @@ std::shared_ptr<Window> Application::GenerateCollegeButton(const std::string & c
         return nullptr;
     }
 
+    std::array<unsigned int, 9> projections = ROI::GetInstance()->CalculateROIs(col);
+
     std::shared_ptr<Window> CollegeWindow =  std::make_shared<Window>(Window(col->GetName(), false));
+
+    CollegeWindow->reserveInfoSpace(14);
     CollegeWindow->addInfo("Cost: " + std::to_string(col->GetCost()), 1);
     CollegeWindow->addInfo("Return: " + std::to_string(col->GetReturn()), 1);
+
+    CollegeWindow->addInfo("", 15);
+
+    CollegeWindow->addInfo("Projections:", 15);
+
+    if(!Application::instance->compact){
+        CollegeWindow->addInfo("Low interest rate and Low pay: " + std::to_string(projections[0]), 10);
+        CollegeWindow->addInfo("Low interest rate and Medium pay: " + std::to_string(projections[1]), 14);
+        CollegeWindow->addInfo("Low interest rate and High pay: " + std::to_string(projections[2]), 4);
+        CollegeWindow->addInfo("Medium interest rate and Low pay: " + std::to_string(projections[3]), 10);
+        CollegeWindow->addInfo("Medium interest rate and Medium pay: " + std::to_string(projections[4]), 14);
+        CollegeWindow->addInfo("Medium interest rate and High pay: " + std::to_string(projections[5]), 4);
+        CollegeWindow->addInfo("High interest rate and Low pay: " + std::to_string(projections[6]), 10);
+        CollegeWindow->addInfo("High interest rate and Medium pay: " + std::to_string(projections[7]), 14);
+        CollegeWindow->addInfo("High interest rate and High pay: " + std::to_string(projections[8]), 4);
+    }else{
+        CollegeWindow->addInfo("Medium interest rate and Medium pay: " + std::to_string(projections[4]), 14);
+    }
+    CollegeWindow->addInfo("", 15);
+
+    CollegeWindow->addInfo("Value: " +  std::to_string((int)std::floor(std::pow(90/projections[4],2))), 15);
+
     CollegeWindow->addPtr( instance->windows[1], "Back");
     return CollegeWindow;
 }
@@ -96,9 +140,13 @@ bool Application::CompareFunction (const std::shared_ptr<College>& a, const std:
 }
 
 void Application::GenerateCollegeButtons() {
+
+    //might be a memory leak here check later with how shared pointer works
+
+    Application::instance->windows[1] = nullptr;
+
     Application::instance->windows[1] = std::make_shared<Window>(Window("Load Colleges", true));
     Application::instance->windows[0]->updatePtr(Application::instance->windows[1], 0);
-
 
     std::vector<std::shared_ptr<College>> list = ROI::LoadAllColleges();
 

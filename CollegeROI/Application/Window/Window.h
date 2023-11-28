@@ -57,7 +57,7 @@ class Window {
         void addInput(const std::string &labelVal, bool numOnly = false);
         void runFunction(unsigned int Pos) const;
         void updatePtr(const std::shared_ptr<Window>& window, unsigned int Pos);
-
+        void reserveInfoSpace(unsigned int size);
         static std::shared_ptr<Window> ClickWindow(const std::shared_ptr<Window>& window, unsigned int pos);
         static void RefreshWindow(const std::shared_ptr<Window>& window);
         static std::shared_ptr<Window> LoadWindow(const std::shared_ptr<Window>& window);

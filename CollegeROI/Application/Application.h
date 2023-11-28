@@ -8,11 +8,14 @@
 #include "./Window/Window.h"
 #include <string>
 #include <algorithm>
+#include <cmath>
 class Application {
     private:
         ROI* roiInstance;
         std::vector<std::shared_ptr<Window>> windows;
         Application() {};
+
+        const bool compact = false;
     protected:
         std::shared_ptr<Window> win;
         std::vector<std::shared_ptr<Window>> tempWindows;

@@ -78,3 +78,31 @@ std::vector<std::shared_ptr<College>> ROI::LoadAllColleges() {
    return  vals;
 }
 
+std::array<unsigned int, 9> ROI::CalculateROIs(const std::shared_ptr<College> &college) {
+    unsigned int debt = college->GetCost() * 4;
+    unsigned int yearlyReturn = college->GetReturn();
+    std::array<unsigned int,9> projections{};
+
+    projections[0] = ROI::yearsToPayBack(debt, yearlyReturn, (double)LowInterest/100, (double)LowPay/100, 1);
+    projections[1] = ROI::yearsToPayBack(debt, yearlyReturn, (double)LowInterest/100, (double)MediumPay/100, 1);
+    projections[2] = ROI::yearsToPayBack(debt, yearlyReturn, (double)LowInterest/100, (double)HighPay/100, 1);
+    projections[3] = ROI::yearsToPayBack(debt, yearlyReturn, (double)MediumInterest/100, (double)LowPay/100, 1);
+    projections[4] = ROI::yearsToPayBack(debt, yearlyReturn, (double)MediumInterest/100, (double)MediumPay/100, 1);
+    projections[5] = ROI::yearsToPayBack(debt, yearlyReturn, (double)MediumInterest/100, (double)HighPay/100, 1);
+    projections[6] = ROI::yearsToPayBack(debt, yearlyReturn, (double)HighInterest/100, (double)LowPay/100, 1);
+    projections[7] = ROI::yearsToPayBack(debt, yearlyReturn, (double)HighInterest/100, (double)MediumPay/100, 1);
+    projections[8] = ROI::yearsToPayBack(debt, yearlyReturn, (double)HighInterest/100, (double)HighPay/100, 1);
+
+    return projections;
+}
+
+unsigned int ROI::yearsToPayBack(double currentCost, double yearlyPay, double interest, double payRate, unsigned int length) {
+
+    if(length >= 75) return 75;
+
+    double nextCost = (currentCost - (yearlyPay*payRate))*std::pow(e,interest);
+    if(nextCost <= 0 ) {return length;}
+
+    return yearsToPayBack(nextCost,  yearlyPay,  interest,  payRate, length +1);
+}
+

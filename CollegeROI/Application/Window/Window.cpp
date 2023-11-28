@@ -124,7 +124,7 @@ void Window::generateWindow(const std::shared_ptr<Window> &window) {
     Print(window->information, 15);
 
     for (int i = 0; i < window->additionalInfo.size(); i++) {
-        Print(window->additionalInfo[i].Info, window->additionalInfo[i].Color);
+        Print(window->additionalInfo.at(i).Info, window->additionalInfo[i].Color);
     }
 
     std::cout << std::endl;
@@ -256,6 +256,10 @@ void Window::runFunction(unsigned int pos) const {
 
 void Window::updatePtr(const std::shared_ptr<Window> &window, unsigned int Pos) {
     windowPtr[Pos] = window;
+}
+
+void Window::reserveInfoSpace(unsigned int size) {
+    additionalInfo.reserve(size);
 }
 
 

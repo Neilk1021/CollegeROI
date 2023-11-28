@@ -16,19 +16,30 @@
 #include <stdexcept>
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
+#include <termios.h>
 #include "../Button/Button.h"
 #include <vector>
 #include "../InputField/InputField.h"
 #include "../TextInput/TextInput.h"
 #include <algorithm>
 
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define ENTER 13
-#define BACKSPACE 8
+#ifdef _WIN32
+    #define KEY_UP 72
+    #define KEY_DOWN 80
+    #define KEY_LEFT 75
+    #define KEY_RIGHT 77
+    #define ENTER 13
+    #define BACKSPACE 8
+#endif
+
+#ifdef __APPLE__
+    #define KEY_UP 65
+    #define KEY_DOWN  66
+    #define KEY_LEFT  67
+    #define KEY_RIGHT  68
+    #define ENTER 13
+    #define BACKSPACE 8
+#endif
 
 struct subHeading{
     int Color;

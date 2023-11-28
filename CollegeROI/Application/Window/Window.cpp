@@ -64,19 +64,6 @@ std::shared_ptr<Window> Window::LoadWindow(const std::shared_ptr<Window>& window
     //LoadWindow(Window::ClickWindow(window, window->buttonVal));
 }
 
-#ifdef __APPLE__
-int getch(){
-    system ("/bin/stty raw");
-    int c;
-    system ("/bin/stty -echo");
-    c = getc(stdin);
-    system ("/bin/stty echo");
-    system ("/bin/stty cooked");
-    std::cout << c << std::endl;
-    return c;
-}
-#endif
-
 InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
     int c = 0;
     bool clicked = false;

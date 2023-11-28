@@ -7,11 +7,17 @@
 #include <memory>
 #include <list>
 #include <string>
+#ifdef _WIN32
 #include <windows.h>
+#include <conio.h>
+#endif
+
 #include <iostream>
 #include <stdexcept>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 #include "../Button/Button.h"
-#include <conio.h>
 #include <vector>
 #include "../InputField/InputField.h"
 #include "../TextInput/TextInput.h"
@@ -31,7 +37,10 @@ struct subHeading{
 
 class Window {
     private:
-        static HANDLE hConsole;
+
+    #ifdef _WIN32
+            static HANDLE hConsole;
+    #endif
         std::vector<std::shared_ptr<Window>> windowPtr;
         std::vector<InputField*> inputs;
         std::vector<subHeading> additionalInfo;
@@ -41,6 +50,8 @@ class Window {
         unsigned int buttonVal = 1;
         bool isLoaded = false;
         bool intakeInfo;
+
+        const bool macVersion  = false;
 
     public:
         std::shared_ptr<Window> nextWin = nullptr;

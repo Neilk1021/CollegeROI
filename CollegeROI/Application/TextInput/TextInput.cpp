@@ -10,6 +10,7 @@ TextInput::TextInput(InputTypes::Type type, unsigned int pos, const std::string 
     numOnly = num;
 }
 
+#ifdef _WIN32
 void TextInput::refresh(unsigned int checkVal, HANDLE hConsole) {
     if(checkVal == val){
         SetConsoleTextAttribute(hConsole, ColorHighlight);
@@ -22,6 +23,23 @@ void TextInput::refresh(unsigned int checkVal, HANDLE hConsole) {
     SetConsoleTextAttribute(hConsole, Color);
     std::cout << label << " " << info << std::endl;
 }
+#endif
+
+#ifdef __APPLE__
+void TextInput::refresh(unsigned int checkVal) {
+    if(checkVal == val){
+
+        const std::string & concat = "\x1b[" + std::to_string(Color) +";" +
+                std::to_string(ColorHighlight) + "m " + label + info + " \x1b[0m  \n";
+        std::cout << concat << std::endl;
+        return;
+    }
+
+    const std::string & concat = "\x1b[" + std::to_string(Color) +
+            "m " + label + info + " \x1b[0m  \n";
+    std::cout << concat << std::endl;
+}
+#endif
 
 void TextInput::addChar(char c) {
     info += c;

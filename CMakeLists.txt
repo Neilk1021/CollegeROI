@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(Google_tests)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 
 add_executable(CollegeROI_ main.cpp
         CollegeROI/College/College.cpp
@@ -26,3 +26,4 @@ add_executable(CollegeROI_ main.cpp
         CollegeROI/CSV-Compiler/CSVCompiler.cpp
         CollegeROI/CSV-Compiler/CSVCompiler.h
 )
+

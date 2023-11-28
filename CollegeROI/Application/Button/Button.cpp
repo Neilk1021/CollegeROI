@@ -4,6 +4,7 @@
 
 #include "Button.h"
 
+#ifdef _WIN32
 void Button::refresh(unsigned int checkVal, HANDLE hConsole) {
     if(checkVal == val){
         SetConsoleTextAttribute(hConsole, ColorHighlight);
@@ -16,7 +17,23 @@ void Button::refresh(unsigned int checkVal, HANDLE hConsole) {
     SetConsoleTextAttribute(hConsole, Color);
     std::cout << label << std::endl;
 }
+#endif
 
+#ifdef __APPLE__
+void Button::refresh(unsigned int checkVal) {
+    if(checkVal == val){
+        const std::string & concat = "\x1b[" + std::to_string(Color) +";" +
+                                     std::to_string(ColorHighlight) + "m " + label + " \x1b[0m  \n";
+        std::cout << concat << std::endl;
+
+        return;
+    }
+
+    const std::string & concat = "\x1b[" + std::to_string(Color) +
+                                 "m " + label + " \x1b[0m  \n";
+    std::cout << concat << std::endl;
+}
+#endif
 
 void Button::runFunction(const std::vector<std::string>& data_) const {
     if(type != InputTypes::Action){

@@ -6,7 +6,6 @@
 
 TEST(CollegeCheckSuit, ExampleCollege){
     ROI* roiInstance = ROI::GetInstance();
-
     ROI::AddCollege("Berkley", 15000, 15000);
 
     EXPECT_EQ(roiInstance->LoadCollege("Berkley")->GetCost(), 15000);

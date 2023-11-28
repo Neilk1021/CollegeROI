@@ -6,6 +6,7 @@
 
 #include <utility>
 
+#ifdef _WIN32
 HANDLE Window::hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 void Window::Print(const std::string &str, int Color) {
@@ -23,6 +24,17 @@ void Window::Clear_screen(char fill) {
     FillConsoleOutputAttribute(console, s.wAttributes, cells, tl, &written);
     SetConsoleCursorPosition(console, tl);
 }
+#endif
+#ifdef __APPLE__
+void Window::Print(const std::string &str, int Color) {
+    const std::string & concat = "\x1b[" + std::to_string(Color) +"m " + str + " \x1b[0m  \n";
+    std::cout << concat << std::endl;
+}
+
+void Window::Clear_screen(char fill) {
+    system("clear");
+}
+#endif
 
 std::shared_ptr<Window> Window::LoadWindow(const std::shared_ptr<Window>& window) {
     if(window == nullptr){
@@ -52,6 +64,19 @@ std::shared_ptr<Window> Window::LoadWindow(const std::shared_ptr<Window>& window
     //LoadWindow(Window::ClickWindow(window, window->buttonVal));
 }
 
+#ifdef __APPLE__
+int getch(){
+    system ("/bin/stty raw");
+    int c;
+    system ("/bin/stty -echo");
+    c = getc(stdin);
+    system ("/bin/stty echo");
+    system ("/bin/stty cooked");
+    std::cout << c << std::endl;
+    return c;
+}
+#endif
+
 InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
     int c = 0;
     bool clicked = false;
@@ -59,7 +84,6 @@ InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window
     while(!clicked)
     {
         c = 0;
-
         switch((c= getch())) {
             case KEY_UP:
                 if(window->buttonVal > 1) {window->buttonVal--;}
@@ -119,7 +143,7 @@ void Window::RefreshWindow(const std::shared_ptr<Window>& window) {
     generateWindow(window);
 
 }
-
+#ifdef _WIN32
 void Window::generateWindow(const std::shared_ptr<Window> &window) {
     Print(window->information, 15);
 
@@ -148,6 +172,38 @@ void Window::generateWindow(const std::shared_ptr<Window> &window) {
         }
     }
 }
+#endif
+
+#ifdef __APPLE__
+void Window::generateWindow(const std::shared_ptr<Window> &window) {
+    Print(window->information, 15);
+
+    for (int i = 0; i < window->additionalInfo.size(); i++) {
+        Print(window->additionalInfo.at(i).Info, window->additionalInfo[i].Color);
+    }
+
+    std::cout << std::endl;
+
+    for (int i = 0; i < window->inputs.size(); ++i) {
+        InputField * convert = window->inputs[i];
+
+        TextInput * textI;
+        Button * button;
+
+        InputTypes::Type type = convert->getType();
+        switch (type) {
+            case InputTypes::Keyboard:
+                textI = dynamic_cast<TextInput*>(convert);
+                textI->refresh(window->buttonVal);
+                break;
+            default:
+                button = dynamic_cast<Button*>(convert);
+                button->refresh(window->buttonVal);
+                break;
+        }
+    }
+}
+#endif
 
 std::shared_ptr<Window> Window::ClickWindow(const std::shared_ptr<Window> &window, unsigned int pos) {
 

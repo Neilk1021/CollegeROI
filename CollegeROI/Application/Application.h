@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+
 class Application {
     private:
         ROI* roiInstance;

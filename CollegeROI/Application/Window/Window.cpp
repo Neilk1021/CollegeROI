@@ -113,7 +113,6 @@ InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window
                 break;
         }
     }
-
     return window->inputs[window->buttonVal - 1]->getType();
 
 }

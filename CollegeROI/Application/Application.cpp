@@ -9,7 +9,6 @@ Application *Application::GetInstance() {
     if(instance == nullptr){
         instance = new Application();
         instance->roiInstance = ROI::GetInstance();
-
         Window::Print("College ROI Calculator", 15);
         Window::Print("-Neil Ketteringham CC-2023", 1);
         std::cin.get();

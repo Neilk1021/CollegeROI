@@ -118,7 +118,6 @@ InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window
 
 }
 #endif
-
 #ifdef __APPLE__
 InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
     bool clicked = false;

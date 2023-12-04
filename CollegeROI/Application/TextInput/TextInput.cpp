@@ -29,15 +29,15 @@ void TextInput::refresh(unsigned int checkVal, HANDLE hConsole) {
 void TextInput::refresh(unsigned int checkVal) {
     if(checkVal == val){
 
-        const std::string & concat = "\x1b[" + std::to_string(Color) +";" +
+        const std::string & concat = "\r\x1b[" + std::to_string(Color) +";" +
                 std::to_string(ColorHighlight) + "m " + label + info + " \x1b[0m  \n";
-        std::cout << concat << std::endl;
+        std::cout << concat << std::flush << std::endl;
         return;
     }
 
-    const std::string & concat = "\x1b[" + std::to_string(Color) +
+    const std::string & concat = "\r\x1b[" + std::to_string(Color) +
             "m " + label + info + " \x1b[0m  \n";
-    std::cout << concat << std::endl;
+    std::cout << concat << std::flush << std::endl;
 }
 #endif
 

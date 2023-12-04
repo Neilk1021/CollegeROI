@@ -33,12 +33,12 @@
 #endif
 
 #ifdef __APPLE__
-    #define KEY_UP 27
-    #define KEY_DOWN  66
-    #define KEY_LEFT  67
-    #define KEY_RIGHT  68
-    #define ENTER 13
-    #define BACKSPACE 8
+    //#define KEY_UP 27
+    //#define KEY_DOWN  66
+    //#define KEY_LEFT  67
+    //#define KEY_RIGHT  68
+    //#define ENTER 13
+    //#define BACKSPACE 8
     #include <ncurses.h>
 #endif
 

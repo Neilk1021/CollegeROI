@@ -22,16 +22,16 @@ void Button::refresh(unsigned int checkVal, HANDLE hConsole) {
 #ifdef __APPLE__
 void Button::refresh(unsigned int checkVal) {
     if(checkVal == val){
-        const std::string & concat = "\x1b[" + std::to_string(Color) +";" +
-                                     std::to_string(ColorHighlight) + "m " + label + " \x1b[0m  \n";
-        std::cout << concat << std::endl;
+        const std::string & concat = "\r\x1b[" + std::to_string(Color) +";" +
+                                     std::to_string(ColorHighlight) + "m " + label + " \x1b[0m";
+        std::cout << concat << std::flush << std::endl;
 
         return;
     }
 
-    const std::string & concat = "\x1b[" + std::to_string(Color) +
-                                 "m " + label + " \x1b[0m  \n";
-    std::cout << concat << std::endl;
+    const std::string & concat = "\r\x1b[" + std::to_string(Color) +
+                                 "m " + label + " \x1b[0m ";
+    std::cout << concat << std::flush << std::endl;
 }
 #endif
 

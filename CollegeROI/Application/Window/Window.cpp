@@ -27,7 +27,7 @@ void Window::Clear_screen(char fill) {
 #endif
 #ifdef __APPLE__
 void Window::Print(const std::string &str, int Color) {
-    const std::string & concat = "\x1b[" + std::to_string(Color) +"m " + str + " \x1b[0m  \n";
+    const std::string & concat = "\r\x1b[" + std::to_string(Color) +"m " + str + " \x1b[0m";
     std::cout << concat << std::endl;
 }
 
@@ -64,6 +64,7 @@ std::shared_ptr<Window> Window::LoadWindow(const std::shared_ptr<Window>& window
     //LoadWindow(Window::ClickWindow(window, window->buttonVal));
 }
 
+#ifdef _WIN32
 InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
     int c = 0;
     bool clicked = false;
@@ -116,6 +117,66 @@ InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window
     return window->inputs[window->buttonVal - 1]->getType();
 
 }
+#endif
+
+#ifdef __APPLE__
+InputTypes::Type Window::handleWindowInput(const std::shared_ptr<Window> &window) {
+    bool clicked = false;
+    int ch;
+
+    /* Curses Initialisations */
+    initscr();                  /* curses initialization */
+    keypad(stdscr, TRUE);       /* enable KEY_UP/KEY_DOWN/KEY_RIGHT/KEY_LEFT */
+    noecho();                   /* prevent displaying if other keys */
+
+    while (!clicked) {
+        switch (ch = getch()) {
+            case KEY_UP:
+                if(window->buttonVal > 1) {window->buttonVal--;}
+                RefreshWindow(window);
+                break;
+            case KEY_DOWN:
+                if(window->buttonVal < window->inputs.size()) {window->buttonVal++;}
+                RefreshWindow(window);
+                break;
+            case KEY_RIGHT:
+                break;
+            case KEY_LEFT:
+                break;
+            case 10:
+                clicked = true;
+                break;
+            case KEY_BACKSPACE:
+            case 127:
+            case 8:
+                if(window->inputs[window->buttonVal - 1]->getType() == InputTypes::Type::Keyboard){
+                    InputField * convert = window->inputs[window->buttonVal - 1];
+                    auto text = dynamic_cast<TextInput*>(convert);
+                    text->deleteChar();
+                }
+                RefreshWindow(window);
+                break;
+            default:
+                if(!std::isalnum(ch) && ch != 32){break;}
+
+                if(window->inputs[window->buttonVal - 1]->getType() == InputTypes::Type::Keyboard){
+                    InputField * convert = window->inputs[window->buttonVal - 1];
+                    auto text = dynamic_cast<TextInput*>(convert);
+
+                    if(text->isNumOnly() && !std::isdigit(ch) || !text->isNumOnly() && (!std::isalpha(ch) && ch != 32)){
+                        break;
+                    }
+
+                    text->addChar((char)ch);
+                }
+                RefreshWindow(window);
+                break;
+        }
+    }
+    return window->inputs[window->buttonVal - 1]->getType();
+
+}
+#endif
 
 void Window::RefreshWindow(const std::shared_ptr<Window>& window) {
     if(window == nullptr){

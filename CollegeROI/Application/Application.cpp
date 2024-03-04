@@ -57,8 +57,6 @@ Application *Application::GetInstance() {
             if(instance->win == instance->windows[0]){
                 GenerateCollegeButtons();
             }
-
-
             Application::instance->win = Window::LoadWindow(Application::instance->win);
         }
     }
@@ -135,7 +133,7 @@ std::shared_ptr<Window> Application::GenerateCollegeButton(const std::string & c
     CollegeWindow->addInfo("", 15);
 
     CollegeWindow->addInfo("Value: " +  std::to_string((int)std::floor(std::pow(90/projections[4],2))), 15);
-    CollegeWindow->addInfo("Max cost to consider attending: " + std::to_string(ROI::GetInstance()->GetMaxCostToAttend(col->GetReturn(),25)), 15);
+    CollegeWindow->addInfo("Max cost to consider attending:  " + std::to_string(ROI::GetInstance()->GetMaxCostToAttend(col->GetReturn(),25)), 15);
 
     CollegeWindow->addPtr( instance->windows[1], "Back");
     return CollegeWindow;

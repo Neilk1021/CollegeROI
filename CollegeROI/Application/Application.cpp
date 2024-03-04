@@ -18,20 +18,27 @@ Application *Application::GetInstance() {
         std::shared_ptr<Window> LoadColleges =  std::make_shared<Window>(Window("Load Colleges", true));
         std::shared_ptr<Window> SearchColleges =  std::make_shared<Window>(Window("Search Colleges", true));
         std::shared_ptr<Window> AddColleges =  std::make_shared<Window>(Window("Add Colleges", true));
+        std::shared_ptr<Window> About =  std::make_shared<Window>(Window("About", false));
 
         instance->windows.push_back(mainMenu);
         instance->windows.push_back(LoadColleges);
         instance->windows.push_back(SearchColleges);
         instance->windows.push_back(AddColleges);
+        instance->windows.push_back(About);
 
         mainMenu->addInfo("-Neil Ketteringham CC-2023", 1);
         mainMenu->addPtr(instance->windows[1], "Load Colleges");
         mainMenu->addPtr(instance->windows[2], "Search Colleges");
         mainMenu->addPtr(instance->windows[3], "Add Colleges");
+        mainMenu->addPtr(instance->windows[4], "About");
 
         AddColleges->addInput("Name:", false);
         AddColleges->addInput("Price:", true);
         AddColleges->addInput("Average Salary:", true);
+
+
+        About->addInfo("Made by Neil Ketteringham to determine return on investment for colleges.",1);
+        About->addPtr(instance->windows[0], "Back");
 
         SearchColleges->addInput("Name:", false);
 
@@ -87,7 +94,6 @@ void Application::LoadCollegeWindow(const std::string & collegeName, unsigned in
     CollegeWindow->addInfo("High interest rate and Medium pay: " + std::to_string(projections[7]), 14);
     CollegeWindow->addInfo("High interest rate and High pay: " + std::to_string(projections[8]), 4);
 
-
     CollegeWindow->addPtr( instance->windows[2], "Back");
 
     Window::UnloadWindow(instance->windows[2], CollegeWindow);
@@ -129,6 +135,7 @@ std::shared_ptr<Window> Application::GenerateCollegeButton(const std::string & c
     CollegeWindow->addInfo("", 15);
 
     CollegeWindow->addInfo("Value: " +  std::to_string((int)std::floor(std::pow(90/projections[4],2))), 15);
+    CollegeWindow->addInfo("Max cost to consider attending " + std::to_string(ROI::GetInstance()->GetMaxCostToAttend(col->GetReturn(),25)), 15);
 
     CollegeWindow->addPtr( instance->windows[1], "Back");
     return CollegeWindow;

@@ -14,8 +14,8 @@
 #include "../CSV-Compiler/CSVCompiler.h"
 #include <cmath>
 
-enum PayRate{ LowPay = 8, MediumPay = 11, HighPay = 16};
-enum PrivateInterestRate{ LowInterest = 6, MediumInterest = 9, HighInterest = 13};
+enum PayRate{ LowPay = 8, MediumPay = 12, HighPay = 16};
+enum PrivateInterestRate{ LowInterest = 6, MediumInterest = 8, HighInterest = 11};
 
 class ROI {
     protected:
@@ -33,6 +33,8 @@ class ROI {
         static void AddCollege(const std::string&,  const std::shared_ptr<College>& college);
         //Adds college to hash via cost and ROI
         static void AddCollege(const std::string&, unsigned int, unsigned  int);
+
+        unsigned int GetMaxCostToAttend(double yearlyPay, int minimumValue);
 
         [[nodiscard]]  std::array<unsigned int, 9> CalculateROIs(const std::shared_ptr<College>& college);
 

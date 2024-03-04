@@ -49,3 +49,9 @@ TEST(CSVCheckSuit, CollegeWithSpaces){
 
     EXPECT_EQ(hash->at(10145603584388529810)->GetCost(), 15000);
 }
+
+TEST(ROITestSuit, CalculateValue){
+    ROI* roiInstance = ROI::GetInstance();
+    int val = roiInstance->GetMaxCostToAttend(100000, 36);
+    EXPECT_EQ(26562, val);
+}

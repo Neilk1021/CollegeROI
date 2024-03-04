@@ -106,3 +106,28 @@ unsigned int ROI::yearsToPayBack(double currentCost, double yearlyPay, double in
     return yearsToPayBack(nextCost,  yearlyPay,  interest,  payRate, length +1);
 }
 
+unsigned int ROI::GetMaxCostToAttend(double yearlyPay, int minimumValue) {
+    unsigned int _maxCost = 100000;
+    unsigned int _minCost = 0;
+    unsigned int _cost;
+
+    int maxLoops = 75;
+    int currentLoops = 0;
+    float tolerance = 1;
+    float value;
+
+    do{
+        _cost = (_maxCost + _minCost)/2;
+        value =  ROI::yearsToPayBack(_cost * 4, yearlyPay, (double)MediumInterest/100, (double)MediumPay/100, 1);
+        value = std::pow(90/value,2);
+        if((value - (float)minimumValue) > tolerance){
+            _minCost = _cost;
+        }else if((value - (float)minimumValue) < tolerance){
+            _maxCost = _cost;
+        }
+        currentLoops++;
+    }while(abs(value - (float)minimumValue) > tolerance && currentLoops < maxLoops);
+
+    return (int)_cost;
+}
+

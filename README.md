@@ -1,5 +1,8 @@
 # College ROI Calculator
 
+## Wrote this in highs school before I learned how to write cleaner C++. 
+However, the C++ I wrote to create a terminal app in both Windows and OSX is still pretty neat.  
+
 ## Overview
 
 Welcome to my College ROI Calculator! This C++ terminal tool helps you calculate the Return on Investment (ROI) of attending a college based on the yearly cost of attendance and the expected salary after graduation.
